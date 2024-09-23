@@ -5,4 +5,6 @@ git config --global user.name "FredyxD25"
 //Actualizar codigo
 git add .
 git commit -m "Cambios en el codigo"
-gir push origin main
+git push origin main
+
+
