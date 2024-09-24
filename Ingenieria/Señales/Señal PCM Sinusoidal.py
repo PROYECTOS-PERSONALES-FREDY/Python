@@ -80,8 +80,9 @@ señal_cuantizada = np.round(señal_normalizada * (ADC - 1)) #Se resta 1 para qu
         '''
 
 # Convertir los valores cuantizados a formato binario (PCM)
-def decimal_a_binario(numero, bits):
-    return format(int(numero), f'0{bits}b')
+def decimal_a_binario(numero, bit):
+    #return format(int(numero), f'0{bit}b')
+    return format(int(numero), f'0{8}b') #Se muestran 8 bits
 
 señal_pcm = [decimal_a_binario(valor, bits_por_muestra) for valor in señal_cuantizada]
 
