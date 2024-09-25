@@ -5,7 +5,7 @@ import json
 
 # Parámetros de la señal
 frecuencia = 5       # Frecuencia de la señal en Hz
-duracion = 0.5         # Duración de la señal en segundos
+duracion = 1         # Duración de la señal en segundos
 fs = 100             # Frecuencia de muestreo (samples/segundo)
 
 valor_primer_byte = '11111111'
@@ -131,7 +131,13 @@ plt.ylim(-2,35)
 plt.grid(True)
 
 plt.subplot(4, 1, 4)
-plt.stem(t, señal_modulada, basefmt=' ',markerfmt='orange' ,linefmt='orange')
+#plt.stem(t, señal_modulada, basefmt=' ',markerfmt='orange' ,linefmt='orange')
+
+colors = ['g', 'm', 'r'] * (len(señal_modulada) // 1)
+for i in range(len(señal_modulada)):
+    plt.stem(t[i], señal_modulada[i], linefmt=colors[i // 1] , basefmt=" ")
+
+
 plt.title(f'Señal Modulada con señal sinusoidal, triangular y cuadrada con {bits_por_muestra} bits')
 plt.ylim(-2,35)
 plt.grid(True)
