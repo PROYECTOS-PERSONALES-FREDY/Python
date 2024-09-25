@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Parámetros
-fs = 10000  # Frecuencia de muestreo
-t = np.arange(0, 1, 1/fs)  # Tiempo de 0 a 1 segundo
+fs = 100  # Frecuencia de muestreo
+t = np.arange(0, 0.1, fs)  # Tiempo de 0 a 1 segundo
 
 # Frecuencia de la portadora (1000 kHz)
 fc = 1000  # Frecuencia de la portadora
