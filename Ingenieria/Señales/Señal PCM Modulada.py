@@ -8,7 +8,7 @@ frecuencia = 5       # Frecuencia de la señal en Hz
 duracion = 0.5         # Duración de la señal en segundos
 fs = 100             # Frecuencia de muestreo (samples/segundo)
 
-valor_primer_byte = 11111111
+valor_primer_byte = '11111111'
 
 bits_por_muestra = 5 # Resolución en bits
 
@@ -56,8 +56,16 @@ def señal_cuantizada_normalizada(señal):
     señal_cuantizada  = [decimal_a_binario(valor, bits_por_muestra) for valor in señal_normalizada]
     return señal_cuantizada , señal_normalizada
 
+def str_int(vector):
+    # Convertir la lista de cadenas a enteros
+    vector_int = [float(x) for x in vector]
+    return vector_int
+    
 def intercalar_vectores (primer_byte,vector1, vector2, vector3):
-    modulacion = [primer_byte]
+    if primer_byte == '':
+        modulacion = []
+    else:
+        modulacion = [primer_byte]
     contador = 0
     limite_maximo = len(t)
     for v1, v2, v3 in zip(vector1, vector2, vector3):
@@ -73,9 +81,7 @@ señal_cuantizada_triangular , señal_normalizada_triangular  = señal_cuantizad
 señal_cuantizada_cuadrada   , señal_normalizada_cuadrada    = señal_cuantizada_normalizada(señal_cuadrada)
 
 bytes_modulados = intercalar_vectores(valor_primer_byte,señal_cuantizada_sinusoidal,señal_cuantizada_triangular,señal_cuantizada_cuadrada)
-señal_modulada = intercalar_vectores('',señal_normalizada_sinusoidal.astype(str),señal_normalizada_triangular.astype(str),señal_normalizada_cuadrada.astype(str))
-
-
+señal_modulada = str_int(intercalar_vectores('',señal_normalizada_sinusoidal,señal_normalizada_triangular,señal_normalizada_cuadrada))
 
 # Especificar el nombre del archivo JSON
 nombre_archivo = 'modulacion_PCM.json'
@@ -90,44 +96,50 @@ plt.figure(figsize=(10, 8))
 
 #Grafica señal sinusoidal
 plt.subplot(4, 2, 1)
-plt.plot(t, señal_original_sinusoidal)
+plt.plot(t, señal_original_sinusoidal, color='g')
 plt.title('Señal Original (Onda Sinusoidal)')
 plt.grid(True)
 
 plt.subplot(4, 2, 2)
 plt.stem(t, señal_normalizada_sinusoidal, basefmt=' ',markerfmt='g' ,linefmt='g')
 plt.title(f'Señal Cuantizada con {bits_por_muestra} bits')
-plt.ylim(0,35)
+plt.ylim(-2,35)
 plt.grid(True)
 
 #Grafica señal triangular
 plt.subplot(4, 2, 3)
-plt.plot(t, señal_original_triangular)
+plt.plot(t, señal_original_triangular, color='m')
 plt.title('Señal Original (Onda Triangular)')
 plt.grid(True)
 
 plt.subplot(4, 2, 4)
 plt.stem(t, señal_normalizada_triangular, basefmt=' ',markerfmt='m' ,linefmt='m')
 plt.title(f'Señal Cuantizada con {bits_por_muestra} bits')
-plt.ylim(0,35)
+plt.ylim(-2,35)
 plt.grid(True)
 
 #Grafica señal cuadrada
 plt.subplot(4, 2, 5)
-plt.plot(t, señal_original_cuadrada)
+plt.plot(t, señal_original_cuadrada, color='r')
 plt.title('Señal Original (Onda Cuadrada)')
 plt.grid(True)
 
 plt.subplot(4, 2, 6)
 plt.stem(t, señal_normalizada_cuadrada, basefmt=' ',markerfmt='r' ,linefmt='r')
 plt.title(f'Señal Cuantizada con {bits_por_muestra} bits')
-plt.ylim(0,35)
+plt.ylim(-2,35)
 plt.grid(True)
 
 plt.subplot(4, 1, 4)
-plt.stem(t, señal_modulada, basefmt=' ',markerfmt='r' ,linefmt='r')
-plt.title(f'Señal Cuantizada con {bits_por_muestra} bits')
+plt.stem(t, señal_modulada, basefmt=' ',markerfmt='orange' ,linefmt='orange')
+plt.title(f'Señal Modulada con señal sinusoidal, triangular y cuadrada con {bits_por_muestra} bits')
+plt.ylim(-2,35)
 plt.grid(True)
+
+'''plt.subplot(4, 1, 4)
+plt.plot(t, señal_modulada, color='orange')
+plt.grid(True)
+'''
 
 plt.tight_layout()
 plt.show()
