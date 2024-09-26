@@ -85,13 +85,29 @@ señal_cuantizada_cuadrada   , señal_normalizada_cuadrada    = señal_cuantizad
 
 bytes_modulados = intercalar_vectores(valor_primer_byte,señal_cuantizada_sinusoidal,señal_cuantizada_triangular,señal_cuantizada_cuadrada)
 señal_modulada = str_int(intercalar_vectores('',señal_normalizada_sinusoidal,señal_normalizada_triangular,señal_normalizada_cuadrada))
-print(len (señal_modulada))
+
+# Crear un diccionario con el vector y un título
+data = {
+    "Sinusoidal": {
+        "Bytes": str_int(señal_cuantizada_sinusoidal)
+        },
+    "Triangular": {
+        "Bytes": str_int(señal_normalizada_triangular)
+        },
+    "Cuadrada": {
+        "Bytes": str_int(señal_normalizada_cuadrada)
+        },
+    "PCM": {
+        "Bytes": bytes_modulados
+        }
+}
+
 # Especificar el nombre del archivo JSON
 nombre_archivo = 'modulacion_PCM.json'
 
 # Generar el archivo JSON
 with open(nombre_archivo, 'w') as archivo_json:
-    json.dump(bytes_modulados, archivo_json)
+    json.dump(data, archivo_json)
 
 # Graficar la señal original y cuantizada
 
