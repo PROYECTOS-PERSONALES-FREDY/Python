@@ -62,12 +62,15 @@ def str_int(vector):
     return vector_int
     
 def intercalar_vectores (primer_byte,vector1, vector2, vector3):
+    
+    contador = 0
+    limite_maximo = len(t)
+    
     if primer_byte == '':
         modulacion = []
     else:
         modulacion = [primer_byte]
-    contador = 0
-    limite_maximo = len(t)
+        
     for v1, v2, v3 in zip(vector1, vector2, vector3):
         if contador < limite_maximo: # Verificar si aún no se ha alcanzado el límite
             modulacion.extend([v1, v2, v3])
@@ -82,7 +85,7 @@ señal_cuantizada_cuadrada   , señal_normalizada_cuadrada    = señal_cuantizad
 
 bytes_modulados = intercalar_vectores(valor_primer_byte,señal_cuantizada_sinusoidal,señal_cuantizada_triangular,señal_cuantizada_cuadrada)
 señal_modulada = str_int(intercalar_vectores('',señal_normalizada_sinusoidal,señal_normalizada_triangular,señal_normalizada_cuadrada))
-
+print(len (señal_modulada))
 # Especificar el nombre del archivo JSON
 nombre_archivo = 'modulacion_PCM.json'
 
@@ -141,11 +144,6 @@ for i in range(len(señal_modulada)):
 plt.title(f'Señal Modulada con señal sinusoidal, triangular y cuadrada con {bits_por_muestra} bits')
 plt.ylim(-2,35)
 plt.grid(True)
-
-'''plt.subplot(4, 1, 4)
-plt.plot(t, señal_modulada, color='orange')
-plt.grid(True)
-'''
 
 plt.tight_layout()
 plt.show()
