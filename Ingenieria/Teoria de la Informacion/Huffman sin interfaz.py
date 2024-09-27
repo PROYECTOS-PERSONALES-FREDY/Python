@@ -19,32 +19,48 @@ class Nodo:
     def __init__(self, simbolo, probabilidad):
         self.simbolo = simbolo
         self.probabilidad = probabilidad
+        #self.id = id  # Nuevo atributo para el índice
         self.izquierda = None
         self.derecha = None
     
     def __lt__(self, otro):
-        return self.probabilidad < otro.probabilidad
+        '''# Primero, comparar por valor; si son iguales, comparar por índice
+        if self.probabilidad  == otro.probabilidad:
+            return self.id > otro.id  # Ordenar más reciente a la derecha'''
+        return self.probabilidad < otro.probabilidad #Compara dos objetos, self objeto actual < otro objeto a comparar
+    
+    # Sobrescribir el método __repr__ para visualizar correctamente
+    def __repr__(self):
+        return f"Nodo(simbolo={self.simbolo}, probabilidad={self.probabilidad})"
 
 def crear_arbol_huffman(probabilidades):
-    # Crear una cola de prioridad con nodos
-    cola_prioridad = [Nodo(simbolo, probabilidad) for simbolo, probabilidad in probabilidades.items()]
-    heapq.heapify(cola_prioridad)
-    
+    # Crear una cola de prioridad con objetos
+    cola_prioridad = [Nodo(simbolo, probabilidad) for simbolo, probabilidad in probabilidades.items()] #Se hace el diccionario con las letras y la probabilidad
+    print("\n Cola antes de heapify:", cola_prioridad)
+    heapq.heapify(cola_prioridad) #Organizar de menor a mayor con el constructor __lt__(self, otro):
+    print("Cola después de heapify:", cola_prioridad,"\n")
+        
     # Crear el árbol de Huffman
     while len(cola_prioridad) > 1:
-        # Extraer los dos nodos con menor probabilidad
+        
+        # Extraer los dos objetos con menor probabilidad nodo
         nodo_izquierdo = heapq.heappop(cola_prioridad)
         nodo_derecho = heapq.heappop(cola_prioridad)
+        print("nodo izquierdo",nodo_izquierdo)
+        print("nodo derecho",nodo_derecho)
         
-        # Crear un nuevo nodo con la suma de sus probabilidades
+        # Crear un nuevo objeto con la suma de sus probabilidades, sin simbolo
         nuevo_nodo = Nodo(None, nodo_izquierdo.probabilidad + nodo_derecho.probabilidad)
+        print("suma ultimas dos probabilidades",nuevo_nodo,"\n")
         nuevo_nodo.izquierda = nodo_izquierdo
         nuevo_nodo.derecha = nodo_derecho
-        
-        # Insertar el nuevo nodo en la cola de prioridad
+            
+        # Insertar el nuevo objeto en la cola de prioridad
         heapq.heappush(cola_prioridad, nuevo_nodo)
-    
-    # El último nodo es la raíz del árbol
+        heapq.heapify(cola_prioridad)
+        print("Cola después de heapify:", cola_prioridad,"\n")
+        
+    # El último objeto es la raíz del árbol
     return cola_prioridad[0]
 
 def asignar_codigos_huffman(nodo, codigo_actual="", codigos={}):
@@ -53,8 +69,8 @@ def asignar_codigos_huffman(nodo, codigo_actual="", codigos={}):
         codigos[nodo.simbolo] = codigo_actual
     else:
         # Recorrer el árbol de forma recursiva
-        asignar_codigos_huffman(nodo.izquierda, codigo_actual + "0", codigos)
-        asignar_codigos_huffman(nodo.derecha, codigo_actual + "1", codigos)
+        asignar_codigos_huffman(nodo.izquierda, codigo_actual + "1", codigos)
+        asignar_codigos_huffman(nodo.derecha, codigo_actual + "0", codigos)
     return codigos
 
 # Función principal que integra todo
@@ -74,8 +90,10 @@ def codificacion_huffman(frase):
     return codigos_huffman, frase_codificada
 
 # Ejemplo de uso
+#while(True):
 #frase = input("Introduce una frase: ")
-frase = ("AAAABBC")
+contador = 0
+frase = ("mi_mama_me_mima")
 probabilidades = calcular_probabilidades(frase)
 codigos_huffman, frase_codificada = codificacion_huffman(frase)
 
