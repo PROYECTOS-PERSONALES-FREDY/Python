@@ -54,23 +54,27 @@ def crear_arbol_huffman(probabilidades):
         print("suma ultimas dos probabilidades",nuevo_nodo,"\n")
         nuevo_nodo.izquierda = nodo_izquierdo
         nuevo_nodo.derecha = nodo_derecho
-            
+                    
         # Insertar el nuevo objeto en la cola de prioridad
         heapq.heappush(cola_prioridad, nuevo_nodo)
         heapq.heapify(cola_prioridad)
+        
         print("Cola después de heapify:", cola_prioridad,"\n")
         
     # El último objeto es la raíz del árbol
     return cola_prioridad[0]
 
 def asignar_codigos_huffman(nodo, codigo_actual="", codigos={}):
+    print(nodo)
     if nodo.simbolo is not None:
         # Si es una hoja, asignar el código actual
         codigos[nodo.simbolo] = codigo_actual
+        print(codigo_actual,codigos)
     else:
         # Recorrer el árbol de forma recursiva
         asignar_codigos_huffman(nodo.izquierda, codigo_actual + "1", codigos)
         asignar_codigos_huffman(nodo.derecha, codigo_actual + "0", codigos)
+        
     return codigos
 
 # Función principal que integra todo
@@ -94,6 +98,14 @@ def codificacion_huffman(frase):
 #frase = input("Introduce una frase: ")
 contador = 0
 frase = ("mi_mama_me_mima")
+
+''' m   1
+    A   01
+    _   000
+    I   0010
+    E   0011
+'''
+
 probabilidades = calcular_probabilidades(frase)
 codigos_huffman, frase_codificada = codificacion_huffman(frase)
 
