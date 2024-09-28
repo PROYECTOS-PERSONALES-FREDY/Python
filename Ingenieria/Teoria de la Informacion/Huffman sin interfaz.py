@@ -1,6 +1,7 @@
 import heapq
 from collections import Counter
 import math
+import numpy as np
 
 # Paso 1: Calcular la probabilidad de cada letra
 def calcular_probabilidades(frase):
@@ -32,13 +33,33 @@ class Nodo:
 
 # Paso 3: Calcular la entropia
 def calcular_entropia(probabilidades):
-    entropia = sum(p * math.log2(1/p) for p in probabilidades.values())
+    entropia = sum(p * math.log2(1/p) for p in probabilidades.values() if p > 0)
     return entropia
 
 # Paso 4: Calcular el largo medio
 def calcular_largo_medio(probabilidades, longitudes_codigos):
-    largo_medio = sum(probabilidades[s] * longitudes_codigos[s] for s in probabilidades)
+    numero_items = 0
+    i = 0
+    largo_medio = 0
+    v_codigos = []
+    v_probabilidades = []
+    
+    for letras, codigo in longitudes_codigos.items():
+        v_codigos.append(len(codigo))
+        numero_items += 1
+        
+    for pro in probabilidades.values():
+        v_probabilidades.append(pro)
+        
+    print (v_codigos)
+    print (v_probabilidades)
+    
+    while(i < numero_items):
+        largo_medio = v_codigos[i]*v_probabilidades[i] + largo_medio
+        i += 1
+    i = 0
     return largo_medio
+
 
 # Paso 5: Calcular la eficiencia
 def calcular_eficiencia(entropia, largo_medio):
@@ -134,9 +155,8 @@ def main():
     entropia = calcular_entropia(probabilidades)
     
     # Calcular largo medio
-    for codigo, prob in codigos_huffman.items():
-        largo_binario = len(codigo)
-        largo_medio = calcular_largo_medio(prob, largo_binario)
+    largo_medio = calcular_largo_medio(probabilidades,codigos_huffman)
+        
     '''# Calcular eficiencia
     eficiencia = calcular_eficiencia(entropia)'''
 
