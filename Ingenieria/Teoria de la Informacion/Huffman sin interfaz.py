@@ -32,12 +32,23 @@ class Nodo:
 
 # Paso 3: Calcular la entropia
 def calcular_entropia(probabilidades):
-    entropia = -sum(p * math.log2(p) for p in probabilidades.values())
+    entropia = -sum(p * math.log2(1/p) for p in probabilidades.values())
     return entropia
 
+# Paso 4: Calcular el largo medio
+def calcular_largo_medio(probabilidades, longitudes_codigos):
+    largo_medio = sum(probabilidades[s] * longitudes_codigos[s] for s in probabilidades)
+    return largo_medio
+
+# Paso 5: Calcular la eficiencia
+def calcular_eficiencia(entropia, largo_medio):
+    if largo_medio > 0:
+        eficiencia = entropia / largo_medio
+    else:
+        eficiencia = 0
+    return eficiencia
 
 def crear_arbol_huffman(probabilidades):
-
     # Crear una cola de prioridad con objetos
     cola_prioridad = [Nodo(simbolo, probabilidad*100) for simbolo, probabilidad in probabilidades.items()] #Se hace el diccionario con las letras y la probabilidad
     print("\n Cola antes de heapify:", cola_prioridad)
@@ -55,7 +66,7 @@ def crear_arbol_huffman(probabilidades):
 
         while (cuenta < len(cola_prioridad)):
             if cola_prioridad[cuenta].probabilidad == suma_nodo_izquierdo_derecho:
-                suma_nodo_izquierdo_derecho -= 1
+                suma_nodo_izquierdo_derecho -= 0.1
             cuenta += 1
 
         print("nodo izquierdo",nodo_izquierdo)
@@ -105,30 +116,47 @@ def codificacion_huffman(frase):
     
     return codigos_huffman, frase_codificada
 
-# Ejemplo de uso
-#while(True):
-#frase = input("Introduce una frase: ")
-contador = 0
-frase = ("AAAAABCDDE")
-#frase = ("mi_mama_me_mima")
 
-''' m   1
-    _   01
-    A   000
-    I   0010
-    E   0011
+def main():
+    #frase = ("AAAAABCDDE")
+    #frase = input("Introduce una frase: ")
+    frase = ("mi_mama_me_mima")
+    ''' m   1
+        _   01
+        A   000
+        I   0010
+        E   0011
+    '''
+    # Calcular probabilidades
+    probabilidades = calcular_probabilidades(frase)
+    # Codigo Huffman
+    codigos_huffman, frase_codificada = codificacion_huffman(frase)
+    '''# Calcular entropía
+    entropia = calcular_entropia(probabilidades)
+    # Calcular largo medio
+    largo_medio = calcular_largo_medio(probabilidades, longitudes_codigos)
+    # Calcular eficiencia
+    eficiencia = calcular_eficiencia(entropia)'''
+
+    print("\nProbabilidades de cada letra: ")
+    for letra, prob in probabilidades.items():
+        print(f"{letra}: {prob:.4f}")
+
+    print("\nCódigos de Huffman para cada letra: ")
+    for letra, codigo in codigos_huffman.items():
+        print(f"{letra}: {codigo}")
+
+    print("\nFrase codificada usando Huffman: ")
+    print(frase_codificada)
+    '''
+    print("\nEntropía: ")
+    print(entropia)
+    
+    print("\nLargo medio: ")
+    #print(largo_medio)
+    
+    print("\nEficiencia: ")
+    print(eficiencia)
 '''
-
-probabilidades = calcular_probabilidades(frase)
-codigos_huffman, frase_codificada = codificacion_huffman(frase)
-
-print("\nProbabilidades de cada letra:")
-for letra, prob in probabilidades.items():
-    print(f"{letra}: {prob:.4f}")
-
-print("\nCódigos de Huffman para cada letra:")
-for letra, codigo in codigos_huffman.items():
-    print(f"{letra}: {codigo}")
-
-print("\nFrase codificada usando Huffman:")
-print(frase_codificada)
+if __name__ == "__main__":
+    main()
