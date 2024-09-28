@@ -32,7 +32,7 @@ class Nodo:
 
 # Paso 3: Calcular la entropia
 def calcular_entropia(probabilidades):
-    entropia = -sum(p * math.log2(1/p) for p in probabilidades.values())
+    entropia = sum(p * math.log2(1/p) for p in probabilidades.values())
     return entropia
 
 # Paso 4: Calcular el largo medio
@@ -131,9 +131,10 @@ def main():
     probabilidades = calcular_probabilidades(frase)
     # Codigo Huffman
     codigos_huffman, frase_codificada = codificacion_huffman(frase)
-    '''# Calcular entropía
+    # Calcular entropía
     entropia = calcular_entropia(probabilidades)
-    # Calcular largo medio
+    
+    '''# Calcular largo medio
     largo_medio = calcular_largo_medio(probabilidades, longitudes_codigos)
     # Calcular eficiencia
     eficiencia = calcular_eficiencia(entropia)'''
@@ -148,15 +149,17 @@ def main():
 
     print("\nFrase codificada usando Huffman: ")
     print(frase_codificada)
-    '''
+    
     print("\nEntropía: ")
     print(entropia)
     
+    '''
     print("\nLargo medio: ")
     #print(largo_medio)
     
     print("\nEficiencia: ")
     print(eficiencia)
-'''
+    '''
+    
 if __name__ == "__main__":
     main()
