@@ -116,7 +116,6 @@ def codificacion_huffman(frase):
     
     return codigos_huffman, frase_codificada
 
-
 def main():
     #frase = ("AAAAABCDDE")
     #frase = input("Introduce una frase: ")
@@ -134,9 +133,11 @@ def main():
     # Calcular entropía
     entropia = calcular_entropia(probabilidades)
     
-    '''# Calcular largo medio
-    largo_medio = calcular_largo_medio(probabilidades, longitudes_codigos)
-    # Calcular eficiencia
+    # Calcular largo medio
+    for codigo, prob in codigos_huffman.items():
+        largo_binario = len(codigo)
+        largo_medio = calcular_largo_medio(prob, largo_binario)
+    '''# Calcular eficiencia
     eficiencia = calcular_eficiencia(entropia)'''
 
     print("\nProbabilidades de cada letra: ")
@@ -153,13 +154,12 @@ def main():
     print("\nEntropía: ")
     print(entropia)
     
-    '''
     print("\nLargo medio: ")
-    #print(largo_medio)
+    print(largo_medio)
     
-    print("\nEficiencia: ")
-    print(eficiencia)
     '''
+    print("\nEficiencia: ")
+    print(eficiencia)'''
     
 if __name__ == "__main__":
     main()
