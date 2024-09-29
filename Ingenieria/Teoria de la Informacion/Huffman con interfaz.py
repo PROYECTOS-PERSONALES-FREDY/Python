@@ -57,8 +57,6 @@ def calcular_largo_medio(probabilidades, longitudes_codigos):
     
     v_codigos_letras = intercalar_vectores (letras_codigos, v_codigos)
     v_probabilidades_letras = intercalar_vectores (letras_probabilidades, v_probabilidades)
-    print ("vector intercalado :", v_codigos_letras)
-    print ("vector intercalado :", v_probabilidades_letras)
     
     # Identificadores comunes
     identificadores = list(v_codigos_letras.keys())
@@ -69,8 +67,6 @@ def calcular_largo_medio(probabilidades, longitudes_codigos):
         #resultado.append(identificador) #letra comun
         resultado.append(v_codigos_letras.get(identificador, None))  # Valor del primer vector
         resultado.append(v_probabilidades_letras.get(identificador, None))  # Valor del segundo vector
-    
-    print ("vector intercalado :", resultado)
     
     while(i < len(resultado)):
         largo_medio = resultado[i]*resultado[i+1] + largo_medio
@@ -89,9 +85,7 @@ def calcular_eficiencia(entropia, largo_medio):
 def crear_arbol_huffman(probabilidades):
     # Crear una cola de prioridad con objetos
     cola_prioridad = [Nodo(simbolo, probabilidad*100) for simbolo, probabilidad in probabilidades.items()] #Se hace el diccionario con las letras y la probabilidad
-    print("\n Cola antes de heapify:", cola_prioridad)
     heapq.heapify(cola_prioridad) #Organizar de menor a mayor con el constructor __lt__(self, otro):
-    print("Cola después de heapify:", cola_prioridad,"\n")
     
     # Crear el árbol de Huffman
     while len(cola_prioridad) > 1:
@@ -112,12 +106,8 @@ def crear_arbol_huffman(probabilidades):
         except IndexError:
             suma_nodo_izquierdo_derecho -= 0.1
 
-        print("nodo izquierdo",nodo_izquierdo)
-        print("nodo derecho",nodo_derecho)
-        
         # Crear un nuevo objeto con la suma de sus probabilidades, sin simbolo
         nuevo_nodo = Nodo(None,suma_nodo_izquierdo_derecho )
-        print("suma ultimas dos probabilidades",nuevo_nodo,"\n")
         nuevo_nodo.izquierda = nodo_izquierdo
         nuevo_nodo.derecha = nodo_derecho
 
@@ -125,17 +115,13 @@ def crear_arbol_huffman(probabilidades):
         heapq.heappush(cola_prioridad, nuevo_nodo) 
         heapq.heapify(cola_prioridad) 
         
-        print("Cola después de heapify:", cola_prioridad,"\n")
-        
     # El último objeto es la raíz del árbol
     return cola_prioridad[0]
 
 def asignar_codigos_huffman(nodo, codigo_actual="", codigos={}):
-    print(nodo)
     if nodo.simbolo is not None:
         # Si es una hoja, asignar el código actual
         codigos[nodo.simbolo] = codigo_actual
-        print(codigo_actual,codigos)
     else:
         # Recorrer el árbol de forma recursiva
         asignar_codigos_huffman(nodo.derecha, codigo_actual + "0", codigos)
@@ -205,11 +191,11 @@ def procesar_frase():
     
     # Mostrar entropia
     area_impresion.insert(tk.END,"\nEntropia: \n")
-    area_impresion.insert(tk.END,f"{entropia}\n")
+    area_impresion.insert(tk.END,f"{entropia:.4f}\n")
     
     # Mostrar largo medio
     area_impresion.insert(tk.END,"\nLargo medio: \n")
-    area_impresion.insert(tk.END,f"{largo_medio}\n")
+    area_impresion.insert(tk.END,f"{largo_medio:.4f}\n")
     
     # Mostrar Eficiencia
     area_impresion.insert(tk.END,"\nEficiencia: \n")
