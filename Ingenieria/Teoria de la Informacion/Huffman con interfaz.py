@@ -102,11 +102,15 @@ def crear_arbol_huffman(probabilidades):
         
         suma_nodo_izquierdo_derecho = nodo_izquierdo.probabilidad + nodo_derecho.probabilidad
 
-        while (cuenta < len(cola_prioridad)):
-            if cola_prioridad[cuenta].probabilidad == suma_nodo_izquierdo_derecho:
-                if cola_prioridad[1].probabilidad != suma_nodo_izquierdo_derecho:
+        try:
+            while (cuenta < len(cola_prioridad)):
+                if cola_prioridad[0].probabilidad != suma_nodo_izquierdo_derecho:
+                    break
+                elif cola_prioridad[cuenta].probabilidad == suma_nodo_izquierdo_derecho:
                     suma_nodo_izquierdo_derecho -= 0.1
-            cuenta += 1
+                cuenta += 1
+        except IndexError:
+            suma_nodo_izquierdo_derecho -= 0.1
 
         print("nodo izquierdo",nodo_izquierdo)
         print("nodo derecho",nodo_derecho)

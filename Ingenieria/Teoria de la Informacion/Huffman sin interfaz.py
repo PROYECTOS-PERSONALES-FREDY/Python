@@ -100,12 +100,16 @@ def crear_arbol_huffman(probabilidades):
         
         suma_nodo_izquierdo_derecho = nodo_izquierdo.probabilidad + nodo_derecho.probabilidad
 
-        while (cuenta < len(cola_prioridad)):
-            if cola_prioridad[cuenta].probabilidad == suma_nodo_izquierdo_derecho:
-                if cola_prioridad[1].probabilidad != suma_nodo_izquierdo_derecho:
+        try:
+            while (cuenta < len(cola_prioridad)):
+                if cola_prioridad[0].probabilidad != suma_nodo_izquierdo_derecho:
+                    break
+                elif cola_prioridad[cuenta].probabilidad == suma_nodo_izquierdo_derecho:
                     suma_nodo_izquierdo_derecho -= 0.1
-            cuenta += 1
-
+                cuenta += 1
+        except IndexError:
+            suma_nodo_izquierdo_derecho -= 0.1
+            
         print("nodo izquierdo",nodo_izquierdo)
         print("nodo derecho",nodo_derecho)
         
@@ -164,11 +168,35 @@ def intercalar_vectores (vector1, vector2):
     contador = 0
     return diccionario 
 
-def main():
+def guardar_json(frase,probabilidades,codigos_huffman,entropia,largo_medio,eficiencia,frase_codificada):
     v_letras_1 = []
     v_letras_2 = []
     v_probabilidades = []
     v_codigos_huffman = []
+    
+    for letra, prob in probabilidades.items():
+        v_letras_1.append(letra)
+        v_probabilidades.append(prob)
+        
+    for letra, codigo in codigos_huffman.items():
+        v_letras_2.append(letra)
+        v_codigos_huffman.append(codigo)
+    # Guardar informacion en un json
+    data = {
+        "Mensaje": frase,
+        #"Probabilidades": intercalar_vectores(v_letras_1,v_probabilidades),
+        #"Entropia": entropia,
+        #"Largo medio": largo_medio,
+        #"Eficiencia": eficiencia,
+        "Codigo Huffman": intercalar_vectores(v_letras_2,v_codigos_huffman),
+        "Mensaje Codificado": frase_codificada
+        }
+
+    # Generar el archivo JSON
+    with open('Huffman.json', 'w') as archivo_json:
+        json.dump(data, archivo_json)
+def main():
+    
     #frase = ("AAAAABCDDE")
     frase = input("Introduce una frase: ")
     #frase = ("mi_mama_me_mima")
@@ -194,29 +222,8 @@ def main():
     # Calcular eficiencia
     eficiencia = calcular_eficiencia(entropia,largo_medio)
 
-    for letra, prob in probabilidades.items():
-        v_letras_1.append(letra)
-        v_probabilidades.append(prob)
-        
-    for letra, codigo in codigos_huffman.items():
-        v_letras_2.append(letra)
-        v_codigos_huffman.append(codigo)
+    guardar_json(frase,probabilidades,codigos_huffman,entropia,largo_medio,eficiencia,frase_codificada)
     
-    # Guardar informacion en un json
-    data = {
-        "Mensaje": frase,
-        #"Probabilidades": intercalar_vectores(v_letras_1,v_probabilidades),
-        #"Entropia": entropia,
-        #"Largo medio": largo_medio,
-        #"Eficiencia": eficiencia,
-        "Codigo Huffman": intercalar_vectores(v_letras_2,v_codigos_huffman),
-        "Mensaje Codificado": frase_codificada
-        }
-
-    # Generar el archivo JSON
-    with open('Huffman.json', 'w') as archivo_json:
-        json.dump(data, archivo_json)
- 
     print("\nProbabilidades de cada letra: ")
     for letra, prob in probabilidades.items():
         print(f"{letra}: {prob:.4f}")
@@ -229,13 +236,13 @@ def main():
     print(frase_codificada)
     
     print("\nEntropia: ")
-    print(entropia)
+    print(f"{entropia:.4f}")
     
     print("\nLargo medio: ")
-    print(largo_medio)
+    print(f"{largo_medio:.4f}")
     
     print("\nEficiencia: ")
-    print(f"{eficiencia:.2f}%")
+    print(f"{eficiencia:.2f}%\n")
     
 if __name__ == "__main__":
     main()
