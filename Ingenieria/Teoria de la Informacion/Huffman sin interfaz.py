@@ -1,7 +1,7 @@
 import heapq
 from collections import Counter
 import math
-import numpy as np
+import json
 
 # Paso 1: Calcular la probabilidad de cada letra
 def calcular_probabilidades(frase):
@@ -38,33 +38,48 @@ def calcular_entropia(probabilidades):
 
 # Paso 4: Calcular el largo medio
 def calcular_largo_medio(probabilidades, longitudes_codigos):
-    numero_items = 0
     i = 0
     largo_medio = 0
     v_codigos = []
+    letras_codigos =[]
     v_probabilidades = []
+    letras_probabilidades =[]
     
     for letras, codigo in longitudes_codigos.items():
+        letras_codigos.append(letras)
         v_codigos.append(len(codigo))
-        numero_items += 1
         
-    for pro in probabilidades.values():
+    for letras, pro in probabilidades.items():
+        letras_probabilidades.append(letras)
         v_probabilidades.append(pro)
-        
-    print (v_codigos)
-    print (v_probabilidades)
     
-    while(i < numero_items):
-        largo_medio = v_codigos[i]*v_probabilidades[i] + largo_medio
-        i += 1
-    i = 0
-    return largo_medio
+    v_codigos_letras = intercalar_vectores (letras_codigos, v_codigos)
+    v_probabilidades_letras = intercalar_vectores (letras_probabilidades, v_probabilidades)
+    print ("vector intercalado :", v_codigos_letras)
+    print ("vector intercalado :", v_probabilidades_letras)
+    
+    # Identificadores comunes
+    identificadores = list(v_codigos_letras.keys())
 
+    # Construir el nuevo vector alineado
+    resultado = []
+    for identificador in identificadores:
+        #resultado.append(identificador) #letra comun
+        resultado.append(v_codigos_letras.get(identificador, None))  # Valor del primer vector
+        resultado.append(v_probabilidades_letras.get(identificador, None))  # Valor del segundo vector
+    
+    print ("vector intercalado :", resultado)
+    
+    while(i < len(resultado)):
+        largo_medio = resultado[i]*resultado[i+1] + largo_medio
+        i += 2
+    i = 0    
+    return largo_medio
 
 # Paso 5: Calcular la eficiencia
 def calcular_eficiencia(entropia, largo_medio):
     if largo_medio > 0:
-        eficiencia = entropia / largo_medio
+        eficiencia = (entropia / largo_medio) *100  #eficiencia en porcentaje
     else:
         eficiencia = 0
     return eficiencia
@@ -87,7 +102,8 @@ def crear_arbol_huffman(probabilidades):
 
         while (cuenta < len(cola_prioridad)):
             if cola_prioridad[cuenta].probabilidad == suma_nodo_izquierdo_derecho:
-                suma_nodo_izquierdo_derecho -= 0.1
+                if cola_prioridad[1].probabilidad != suma_nodo_izquierdo_derecho:
+                    suma_nodo_izquierdo_derecho -= 0.1
             cuenta += 1
 
         print("nodo izquierdo",nodo_izquierdo)
@@ -137,7 +153,22 @@ def codificacion_huffman(frase):
     
     return codigos_huffman, frase_codificada
 
+def intercalar_vectores (vector1, vector2):
+    contador = 0
+    modulacion = []
+    for v1, v2 in zip(vector1, vector2):
+        modulacion.extend([v1, v2])
+        contador += 2  # Incrementar el contador en 2 por cada iteración 
+    #Transformar vector en diccionario
+    diccionario = {modulacion[i]: modulacion[i+1] for i in range(0, len(modulacion), 2)}
+    contador = 0
+    return diccionario 
+
 def main():
+    v_letras_1 = []
+    v_letras_2 = []
+    v_probabilidades = []
+    v_codigos_huffman = []
     #frase = ("AAAAABCDDE")
     #frase = input("Introduce una frase: ")
     frase = ("mi_mama_me_mima")
@@ -147,6 +178,9 @@ def main():
         I   0010
         E   0011
     '''
+    
+    "https://es.planetcalc.com/2481/?probability=%5B%7B%22name%22%3A%22A%22%2C%22value%22%3A40%2C%22pkID%22%3A%2228632%22%2C%22save_label%22%3A%22%22%2C%22cancel_label%22%3A%22%22%7D%2C%7B%22name%22%3A%22I%22%2C%22value%22%3A13.333%2C%22pkID%22%3A%2228633%22%2C%22save_label%22%3A%22%22%2C%22cancel_label%22%3A%22%22%7D%2C%7B%22name%22%3A%22_%22%2C%22value%22%3A20%2C%22pkID%22%3A%2228634%22%2C%22save_label%22%3A%22%22%2C%22cancel_label%22%3A%22%22%7D%2C%7B%22name%22%3A%22A%22%2C%22value%22%3A20%2C%22pkID%22%3A%2228635%22%2C%22save_label%22%3A%22%22%2C%22cancel_label%22%3A%22%22%7D%2C%7B%22name%22%3A%22E%22%2C%22value%22%3A6.6666%2C%22pkID%22%3A%2228636%22%2C%22save_label%22%3A%22%22%2C%22cancel_label%22%3A%22%22%7D%5D&inverted=1"
+    
     # Calcular probabilidades
     probabilidades = calcular_probabilidades(frase)
     # Codigo Huffman
@@ -157,9 +191,32 @@ def main():
     # Calcular largo medio
     largo_medio = calcular_largo_medio(probabilidades,codigos_huffman)
         
-    '''# Calcular eficiencia
-    eficiencia = calcular_eficiencia(entropia)'''
+    # Calcular eficiencia
+    eficiencia = calcular_eficiencia(entropia,largo_medio)
 
+    for letra, prob in probabilidades.items():
+        v_letras_1.append(letra)
+        v_probabilidades.append(prob)
+        
+    for letra, codigo in codigos_huffman.items():
+        v_letras_2.append(letra)
+        v_codigos_huffman.append(codigo)
+    
+    # Guardar informacion en un json
+    data = {
+        "Mensaje": frase,
+        #"Probabilidades": intercalar_vectores(v_letras_1,v_probabilidades),
+        #"Entropia": entropia,
+        #"Largo medio": largo_medio,
+        #"Eficiencia": eficiencia,
+        "Codigo Huffman": intercalar_vectores(v_letras_2,v_codigos_huffman),
+        "Mensaje Codificado": frase_codificada
+        }
+
+    # Generar el archivo JSON
+    with open('Huffman.json', 'w') as archivo_json:
+        json.dump(data, archivo_json)
+ 
     print("\nProbabilidades de cada letra: ")
     for letra, prob in probabilidades.items():
         print(f"{letra}: {prob:.4f}")
@@ -171,15 +228,14 @@ def main():
     print("\nFrase codificada usando Huffman: ")
     print(frase_codificada)
     
-    print("\nEntropía: ")
+    print("\nEntropia: ")
     print(entropia)
     
     print("\nLargo medio: ")
     print(largo_medio)
     
-    '''
     print("\nEficiencia: ")
-    print(eficiencia)'''
+    print(f"{eficiencia:.2f}%")
     
 if __name__ == "__main__":
     main()
