@@ -156,6 +156,34 @@ def intercalar_vectores (vector1, vector2):
     contador = 0
     return diccionario 
 
+def guardar_json(frase,probabilidades,codigos_huffman,entropia,largo_medio,eficiencia,frase_codificada):
+    v_letras_1 = []
+    v_letras_2 = []
+    v_probabilidades = []
+    v_codigos_huffman = []
+    
+    for letra, prob in probabilidades.items():
+        v_letras_1.append(letra)
+        v_probabilidades.append(prob)
+        
+    for letra, codigo in codigos_huffman.items():
+        v_letras_2.append(letra)
+        v_codigos_huffman.append(codigo)
+    # Guardar informacion en un json
+    data = {
+        "Mensaje": frase,
+        #"Probabilidades": intercalar_vectores(v_letras_1,v_probabilidades),
+        #"Entropia": entropia,
+        #"Largo medio": largo_medio,
+        #"Eficiencia": eficiencia,
+        "Codigo Huffman": intercalar_vectores(v_letras_2,v_codigos_huffman),
+        "Mensaje Codificado": frase_codificada
+        }
+
+    # Generar el archivo JSON
+    with open('Huffman_interfaz.json', 'w') as archivo_json:
+        json.dump(data, archivo_json)
+
 def procesar_frase():
     frase = ""
     frase = entrada_frase.get()
@@ -171,6 +199,8 @@ def procesar_frase():
     largo_medio = calcular_largo_medio(probabilidades,codigos_huffman) 
     # Calcular eficiencia
     eficiencia = calcular_eficiencia(entropia,largo_medio)
+    
+    guardar_json(frase,probabilidades,codigos_huffman,entropia,largo_medio,eficiencia,frase_codificada)
     
     # Limpiar los cuadros de texto
     area_impresion.delete(1.0, tk.END)
