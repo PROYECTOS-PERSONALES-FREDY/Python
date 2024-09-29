@@ -170,8 +170,8 @@ def main():
     v_probabilidades = []
     v_codigos_huffman = []
     #frase = ("AAAAABCDDE")
-    #frase = input("Introduce una frase: ")
-    frase = ("mi_mama_me_mima")
+    frase = input("Introduce una frase: ")
+    #frase = ("mi_mama_me_mima")
     ''' m   1
         _   01
         A   000
