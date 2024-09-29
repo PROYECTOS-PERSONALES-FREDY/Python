@@ -165,35 +165,59 @@ def intercalar_vectores (vector1, vector2):
     diccionario = {modulacion[i]: modulacion[i+1] for i in range(0, len(modulacion), 2)}
     contador = 0
     return diccionario 
-
-# Función para actualizar la interfaz con los resultados
-def mostrar_resultados():
+def procesar_frase():
     frase = entrada_frase.get()
-    probabilidades, codigos_huffman, frase_codificada = codificacion_huffman(frase)
+    if not frase:
+        return
+    # Calcular probabilidades
+    probabilidades = calcular_probabilidades(frase)
+    # Codigo Huffman
+    codigos_huffman, frase_codificada = codificacion_huffman(frase)
+    # Calcular entropía
+    entropia = calcular_entropia(probabilidades)
+    # Calcular largo medio
+    largo_medio = calcular_largo_medio(probabilidades,codigos_huffman) 
+    # Calcular eficiencia
+    eficiencia = calcular_eficiencia(entropia,largo_medio)
     
     # Limpiar los cuadros de texto
     area_probabilidades.delete(1.0, tk.END)
     area_codigos.delete(1.0, tk.END)
     area_codificada.delete(1.0, tk.END)
+    area_entropia.delete(1.0, tk.END)
+    area_largo_medio.delete(1.0, tk.END)
+    area_eficiencia.delete(1.0, tk.END)
     
     # Mostrar las probabilidades
     area_probabilidades.insert(tk.END, "Probabilidades:\n")
     for letra, prob in probabilidades.items():
         area_probabilidades.insert(tk.END, f"{letra}: {prob:.4f}\n")
-    
+        
     # Mostrar los códigos de Huffman
     area_codigos.insert(tk.END, "Códigos de Huffman:\n")
     for letra, codigo in codigos_huffman.items():
         area_codigos.insert(tk.END, f"{letra}: {codigo}\n")
-    
+        
     # Mostrar la frase codificada
     area_codificada.insert(tk.END, "Frase codificada:\n")
     area_codificada.insert(tk.END, frase_codificada)
+    
+    # Mostrar entropia
+    area_entropia.insert(tk.END,"Entropia: \n")
+    area_entropia.insert(tk.END,entropia)
+    
+    # Mostrar largo medio
+    area_largo_medio.insert(tk.END,"Largo medio: \n")
+    area_largo_medio.insert(tk.END,largo_medio)
+    
+    # Mostrar Eficiencia
+    area_eficiencia.insert(tk.END,"Eficiencia: \n")
+    area_eficiencia.insert(tk.END,f"{eficiencia:.2f}%")
 
 # Crear la ventana principal
 ventana = tk.Tk()
 ventana.title("Codificación Huffman")
-ventana.geometry("600x400")
+ventana.geometry("1200x400")
 
 # Etiqueta y campo de entrada para la frase
 etiqueta_frase = ttk.Label(ventana, text="Introduce una frase:")
@@ -203,7 +227,7 @@ entrada_frase = ttk.Entry(ventana, width=50)
 entrada_frase.pack(pady=5)
 
 # Botón para realizar la codificación
-boton_codificar = ttk.Button(ventana, text="Codificar", command=mostrar_resultados)
+boton_codificar = ttk.Button(ventana, text="Codificar", command=procesar_frase)
 boton_codificar.pack(pady=10)
 
 # Área de texto para mostrar probabilidades
@@ -217,6 +241,18 @@ area_codigos.pack(side=tk.LEFT, padx=10)
 # Área de texto para mostrar la frase codificada
 area_codificada = scrolledtext.ScrolledText(ventana, width=60, height=5)
 area_codificada.pack(pady=10)
+
+# Área de texto para mostrar los códigos de entropia
+area_entropia = scrolledtext.ScrolledText(ventana, width=30, height=10)
+area_entropia.pack(side=tk.LEFT, padx=10)
+
+# Área de texto para mostrar los códigos de largo medio
+area_largo_medio = scrolledtext.ScrolledText(ventana, width=30, height=10)
+area_largo_medio.pack(side=tk.LEFT, padx=10)
+
+# Área de texto para mostrar los códigos de Eficiencia
+area_eficiencia = scrolledtext.ScrolledText(ventana, width=30, height=10)
+area_eficiencia.pack(side=tk.LEFT, padx=10)
 
 # Iniciar la ventana
 ventana.mainloop()
