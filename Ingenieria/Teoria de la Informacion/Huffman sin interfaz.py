@@ -55,8 +55,8 @@ def calcular_largo_medio(probabilidades, longitudes_codigos):
     
     v_codigos_letras = intercalar_vectores (letras_codigos, v_codigos)
     v_probabilidades_letras = intercalar_vectores (letras_probabilidades, v_probabilidades)
-    print ("vector intercalado :", v_codigos_letras)
-    print ("vector intercalado :", v_probabilidades_letras)
+    print ("vector intercalado 1 :", v_codigos_letras)
+    print ("vector intercalado 2 :", v_probabilidades_letras)
     
     # Identificadores comunes
     identificadores = list(v_codigos_letras.keys())
@@ -129,7 +129,7 @@ def crear_arbol_huffman(probabilidades):
     return cola_prioridad[0]
 
 def asignar_codigos_huffman(nodo, codigo_actual="", codigos={}):
-    print(nodo)
+    print("codigo huffman",nodo)
     if nodo.simbolo is not None:
         # Si es una hoja, asignar el código actual
         codigos[nodo.simbolo] = codigo_actual
@@ -150,7 +150,7 @@ def codificacion_huffman(frase):
     arbol_huffman = crear_arbol_huffman(probabilidades)
     
     # Paso 3: Asignar códigos de Huffman
-    codigos_huffman = asignar_codigos_huffman(arbol_huffman)
+    codigos_huffman = asignar_codigos_huffman(arbol_huffman, codigos={})
     
     # Codificar la frase
     frase_codificada = ''.join([codigos_huffman[letra] for letra in frase.replace(" ", "").lower()])
@@ -195,6 +195,7 @@ def guardar_json(frase,probabilidades,codigos_huffman,entropia,largo_medio,efici
     # Generar el archivo JSON
     with open('Huffman.json', 'w') as archivo_json:
         json.dump(data, archivo_json)
+
 def main():
     
     #frase = ("AAAAABCDDE")
@@ -245,4 +246,4 @@ def main():
     print(f"{eficiencia:.2f}%\n")
     
 if __name__ == "__main__":
-    main()
+    while(True):main()

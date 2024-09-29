@@ -75,7 +75,7 @@ def calcular_largo_medio(probabilidades, longitudes_codigos):
     while(i < len(resultado)):
         largo_medio = resultado[i]*resultado[i+1] + largo_medio
         i += 2
-    i = 0    
+    i = 0  
     return largo_medio
 
 # Paso 5: Calcular la eficiencia
@@ -152,7 +152,7 @@ def codificacion_huffman(frase):
     arbol_huffman = crear_arbol_huffman(probabilidades)
     
     # Paso 3: Asignar códigos de Huffman
-    codigos_huffman = asignar_codigos_huffman(arbol_huffman)
+    codigos_huffman = asignar_codigos_huffman(arbol_huffman, codigos={})
     
     # Codificar la frase
     frase_codificada = ''.join([codigos_huffman[letra] for letra in frase.replace(" ", "").lower()])
@@ -169,6 +169,7 @@ def intercalar_vectores (vector1, vector2):
     diccionario = {modulacion[i]: modulacion[i+1] for i in range(0, len(modulacion), 2)}
     contador = 0
     return diccionario 
+
 def procesar_frase():
     frase = ""
     frase = entrada_frase.get()
