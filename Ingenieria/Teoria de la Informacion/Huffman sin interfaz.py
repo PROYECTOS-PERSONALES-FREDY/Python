@@ -48,10 +48,14 @@ def calcular_largo_medio(probabilidades, longitudes_codigos):
     for letras, codigo in longitudes_codigos.items():
         letras_codigos.append(letras)
         v_codigos.append(len(codigo))
+        print(letras_codigos)
+        print(v_codigos)
         
     for letras, pro in probabilidades.items():
         letras_probabilidades.append(letras)
         v_probabilidades.append(pro)
+        print(letras_probabilidades)
+        print(v_probabilidades)
     
     v_codigos_letras = intercalar_vectores (letras_codigos, v_codigos)
     v_probabilidades_letras = intercalar_vectores (letras_probabilidades, v_probabilidades)

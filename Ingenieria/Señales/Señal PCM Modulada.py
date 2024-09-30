@@ -81,11 +81,12 @@ def intercalar_vectores (primer_byte,vector1, vector2, vector3, vector4):
     for v1, v2, v3, v4 in zip(vector1, vector2, vector3, vector4):
         if contador < limite_maximo: # Verificar si aún no se ha alcanzado el límite
             modulacion.extend([v1, v2, v3, v4])
-            contador += 3  # Incrementar el contador en 3 por cada iteración
+            contador += 4  # Incrementar el contador en 3 por cada iteración
     # Cortar la lista al límite máximo si excede
     modulacion = modulacion[:limite_maximo]  # +1 para incluir el valor inicial
     return modulacion 
-   
+
+# Inicio Codigo 
 señal_cuantizada_sinusoidal     , señal_normalizada_sinusoidal      = señal_cuantizada_normalizada(señal_sinusoidal)
 señal_cuantizada_triangular     , señal_normalizada_triangular      = señal_cuantizada_normalizada(señal_triangular)
 señal_cuantizada_cuadrada       , señal_normalizada_cuadrada        = señal_cuantizada_normalizada(señal_cuadrada)
